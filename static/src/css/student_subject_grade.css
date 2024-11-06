@@ -1,0 +1,15 @@
+/*دول ممكن اضيفهم هنا وممكن لا طول ما عامل ملف وضايف فيخ خطوط اسمه font.css*/
+/*@font-face {*/
+/*font-family: 'NerkoOne';*/
+/*src: url('/school_management_system/static/src/fonts/BaskervvilleSC-Regular.ttf') ,*/
+/*url('/school_management_system/static/src/fonts/NerkoOne-Regular.ttf') ;*/
+/*font-weight: bold;*/
+/*font-style: normal;*/
+/*}*/
+
+/* تغيير الخط الافتراضي لفورم  property.item في Odoo    */
+/*.font-ArchivoBlack {*/
+/*    font-family: 'ArchivoBlack', 'sans-serif';*/
+/*    font-size: 15px;*/
+/*}*/
+

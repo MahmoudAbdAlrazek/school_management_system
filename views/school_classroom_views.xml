@@ -1,0 +1,61 @@
+<odoo>
+  <!-- Form view for Classroom -->
+  <record id="view_classroom_form" model="ir.ui.view">
+    <field name="name">classroom.form</field>
+    <field name="model">school.classroom</field>
+    <field name="arch" type="xml">
+      <form string="Classroom">
+        <sheet>
+
+          <group>
+            <group string="Classroom And Subjects">
+              <field name="name" placeholder="Enter Classroom Name" />
+              <field name="education_stage" string="Education Stage" />
+              <field name="classroom_stage" string="Classroom Stage" widget="radio" options="{'horizontal': True}" />
+              <field name="subject_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+            </group>
+            <group string="Teacher Information">
+              <field name="teacher_id" context="{'default_email':'abc@gmail'}" />
+              <field name="teacher_subjects" />
+              <field name="teacher_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+            </group>
+          </group>
+
+          <group string="Students">
+            <field name="student_ids" context="{'default_classroom_id': active_id}" widget="one2many_list">
+              <tree editable="bottom">
+                <field name="name" readonly="1" />
+                <field name="id_number" readonly="1" />
+                <field name="education_stage" readonly="1" />
+              </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Tree view for Classroom -->
+  <record id="view_classroom_tree" model="ir.ui.view">
+    <field name="name">classroom.tree</field>
+    <field name="model">school.classroom</field>
+    <field name="arch" type="xml">
+      <tree string="Classrooms">
+        <field name="name" />
+        <field name="subject_ids" />
+        <field name="education_stage" string="Education Stage" />
+        <field name="classroom_stage" string="Classroom Stage" />
+        <field name="teacher_id" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- Action to open Classroom views -->
+  <record id="action_school_classroom" model="ir.actions.act_window">
+    <field name="name">Classrooms</field>
+    <field name="res_model">school.classroom</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+
+</odoo>

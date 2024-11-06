@@ -1,0 +1,12 @@
+<odoo>
+  <record id="nationality_egyptian" model="res.nationality">
+    <field name="name">Egyptian</field>
+  </record>
+  <record id="nationality_saudi" model="res.nationality">
+    <field name="name">Saudi</field>
+  </record>
+  <record id="nationality_american" model="res.nationality">
+    <field name="name">American</field>
+  </record>
+  <!-- يمكنك إضافة المزيد من الجنسيات -->
+</odoo>

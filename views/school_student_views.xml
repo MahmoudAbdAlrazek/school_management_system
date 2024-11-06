@@ -1,0 +1,313 @@
+<odoo>
+  <!--  إنشاء تسلسل للرقم الدراسي (student_number)-->
+
+  <record id="seq_school_student" model="ir.sequence">
+    <field name="name">Student Sequence</field>
+    <field name="code">student_seq</field>
+    <field name="prefix">STD</field>
+    <field name="padding">5</field>
+    <field name="number_increment">1</field>
+  </record>
+
+  <!-- نموذج الطالب المعدل -->
+  <record id="view_school_student_form" model="ir.ui.view">
+    <field name="name">school.student.form</field>
+    <field name="model">school.student</field>
+    <field name="arch" type="xml">
+      <form string="Student">
+        <sheet>
+
+          <header>
+            <button name="%(action_report_student_info)d" string=" Report Student Info" type="action"
+                    class="oe_highlight" />
+            <!--             زر الانتقال إلى المرحلة الأولى يظهر فقط عندما لا يكون الطالب في Grade 1 -->
+            <button name="level_stage_one" type="object" string="Set to Grade 1" class="btn-primary"
+                    invisible="education_stage not in ('1','2','3','6') " />
+            <!--            <button name="level_stage_one" type="object" string="Set to Grade 1" class="btn-primary"-->
+            <!--                    invisible="education_stage != '1' " />-->
+
+            <!-- زر الانتقال إلى المرحلة الثانية يظهر فقط عندما يكون الطالب في المرحلة الأولى -->
+            <button name="level_stage_two" type="object" string="Set to Grade 2" class="btn-primary"
+                    invisible="education_stage != '1' " />
+
+            <!-- زر الانتقال إلى المرحلة الثالثة يظهر فقط عندما يكون الطالب في المرحلة الثانية -->
+            <button name="level_stage_three" type="object" string="Set to Grade 3" class="btn-primary"
+                    invisible="education_stage != '2' " />
+
+            <!-- زر الانتقال إلى المرحلة الرابعة يظهر فقط عندما يكون الطالب في المرحلة الثالثة -->
+            <button name="level_stage_four" type="object" string="Set to Grade 4" class="btn-primary"
+                    invisible="education_stage != '3' " />
+
+            <!-- زر الانتقال إلى المرحلة الخامسة يظهر فقط عندما يكون الطالب في المرحلة الرابعة -->
+            <button name="level_stage_five" type="object" string="Set to Grade 5" class="btn-primary"
+                    invisible="education_stage != '4' " />
+
+            <!-- زر الانتقال إلى المرحلة السادسة يظهر فقط عندما يكون الطالب في المرحلة الخامسة -->
+            <button name="level_stage_six" type="object" string="Set to Grade 6" class="btn-primary"
+                    invisible="education_stage != '5' " />
+
+            <!-- شريط الحالة -->
+            <field name="education_stage" widget="statusbar" statusbar_visible="1,2,3,4,5,6" />
+          </header>
+
+          <label for="student_number" />
+          <h3>
+            <field name="student_number" readonly="1" />
+          </h3>
+
+          <group>
+
+            <group string="Personal Information">
+              <field name="id_number" />
+              <field name="name" />
+              <field name="gender" widget="radio" options="{'horizontal': True}" />
+              <field name="date_of_birth" />
+              <field name="nationality_id" options="{'no_open': True, 'no_create': True}" />
+              <!--                <field name="partner_id" invisible="1" />-->
+            </group>
+
+            <group string="Education Information">
+              <field name="student_photo" widget="image" class="oe_avatar" />
+              <field name="enrollment_date" />
+              <field name="education_stage" readonly="1" />
+              <!--              <field name="total_absences" />-->
+            </group>
+          </group>
+
+          <group>
+            <group string="Contact Information">
+              <field name="phone" widget="phone" placeholder="+123456789" />
+              <field name="email" widget="email" />
+              <field name="address" />
+              <!--              <field name="state_id" />-->
+              <!--              <field name="country_id" />-->
+            </group>
+            <group string="Guardian Information">
+              <field name="guardian_name" />
+              <field name="guardian_relationship" widget="radio" options="{'horizontal': True}" />
+              <field name="guardian_phone" widget="phone" placeholder="+123456789" />
+            </group>
+          </group>
+
+          <group>
+            <group string="Classroom And Subjects">
+              <field name="classroom_id" string="Classroom" options="{'no_open': True, 'no_create': True}" />
+              <field name="classroom_stage" widget="radio" options="{'horizontal': True}" />
+              <field name="subject_ids" widget="many2many_tags"
+
+                     options="{'color_field': 'color', 'no_create': True}" />
+            </group>
+          </group>
+
+          <group string="Grades">
+            <!-- حقل عرض الدرجات -->
+
+            <field name="grade_ids" widget="one2many_list">
+              <tree editable="bottom">
+                <field name="subject_id" options="{'no_open': True, 'no_create': True}"
+                       domain="[('id', 'in', parent.subject_ids)]" />
+                <field name="classroom_stage" />
+                <field name="education_stage" />
+                <field name="max_grade" />
+                <field name="grade" />
+                <field name="is_passed" />
+
+              </tree>
+            </field>
+          </group>
+          <notebook>
+            <page string="Health Information">
+              <group>
+                <field name="health_status" />
+                <field name="allergies" />
+                <field name="emergency_medical_conditions" />
+              </group>
+            </page>
+            <page string="Documents">
+              <group>
+                <field name="official_documents" />
+              </group>
+            </page>
+            <page string="Achievements">
+              <group>
+                <field name="achievements" />
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" />
+          <field name="activity_ids" widget="mail_activity" />
+          <field name="message_ids" widget="mail_thread" />
+        </div>
+      </form>
+    </field>
+  </record>
+
+
+  <!-- Tree view for School Student -->
+  <record id="view_school_student_tree" model="ir.ui.view">
+    <field name="name">school.student.tree</field>
+    <field name="model">school.student</field>
+    <field name="arch" type="xml">
+      <tree string="Students">
+        <field name="student_number" />
+        <field name="name" />
+        <field name="education_stage" />
+        <field name="classroom_stage" />
+        <field name="date_of_birth" />
+        <field name="guardian_name" />
+        <field name="nationality_id" />
+        <field name="active" />
+      </tree>
+    </field>
+  </record>
+
+  <!--  Search View   -->
+  <record id="view_school_student_search" model="ir.ui.view">
+    <field name="name">school.student.search</field>
+    <field name="model">school.student</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name" string="Student Name" />
+        <field name="student_number" string="Student Number" />
+        <field name="id_number" string="ID Number" />
+        <field name="education_stage" string="Education Stage" />
+
+        <filter string="Male" name="filter_male" domain="[('gender','=','male'  )]" />
+        <filter string="Female" name="filter_male" domain="[('gender','=','female'  )]" />
+
+        <filter string="Grade 1" name="filter_grade_1" domain="[('education_stage', '=', '1')]" />
+        <filter string="Grade 2" name="filter_grade_2" domain="[('education_stage', '=', '2')]" />
+        <filter string="Grade 3" name="filter_grade_3" domain="[('education_stage', '=', '3')]" />
+        <filter string="Grade 4" name="filter_grade_4" domain="[('education_stage', '=', '4')]" />
+        <filter string="Grade 5" name="filter_grade_5" domain="[('education_stage', '=', '5')]" />
+        <filter string="Grade 6" name="filter_grade_6" domain="[('education_stage', '=', '6')]" />
+
+        <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}" />
+        <filter string="Education stage" name="group_by_education_stage" context="{'group_by':'education_stage'}" />
+
+      </search>
+    </field>
+  </record>
+
+  <record id="view_student_kanban" model="ir.ui.view">
+    <field name="name">student.kanban</field>
+    <field name="model">school.student</field>
+    <field name="arch" type="xml">
+      <kanban>
+        <field name="name" />
+        <templates>
+          <t t-name="kanban-box">
+            <div class="o_kanban_card"
+                 style="border: 1px solid #e0e0e0; border-radius: 15px; padding: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+              <div class="o_kanban_header d-flex align-items-center justify-content-between">
+                <div class="student-info">
+                  <h4 style="margin: 0; font-size: 18px; font-weight: bold; padding: 10px;">
+                    <field name="name" />
+                  </h4>
+                  <div class="o_kanban_state mt-2">
+                    <span class="badge badge-primary rounded-pill text-uppercase"
+                          style="font-size: 20px; font-weight: bold; background-color: #007bff; padding: 5px 10px;">
+                      <field name="education_stage" />
+                    </span>
+                  </div>
+                </div>
+                <div class="o_kanban_image" style="flex: 0 0 auto;">
+                  <field name="student_photo" widget="image" options="{'preview': 'avatar'}"
+                         style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;" />
+                </div>
+              </div>
+
+              <!-- فئات معلومات الطالب -->
+              <div class="o_kanban_body mt-3" style="display: flex; flex-wrap: wrap; gap: 15px;">
+
+                <!-- معلومات شخصية -->
+                <div class="o_kanban_category" style="width: 100%; margin-bottom: 10px;">
+                  <h5 style="border-bottom: 1px solid #e0e0e0; padding-bottom: 5px;">Personal Information</h5>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">ID Number:</strong>
+                    <span>
+                      <field name="id_number" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Gender:</strong>
+                    <span>
+                      <field name="gender" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Date of Birth:</strong>
+                    <span>
+                      <field name="date_of_birth" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Phone:</strong>
+                    <span>
+                      <field name="phone" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Address:</strong>
+                    <span>
+                      <field name="address" />
+                    </span>
+                  </div>
+                </div>
+
+                <!-- معلومات الوصي -->
+                <div class="o_kanban_category" style="width: 100%; margin-bottom: 10px;">
+                  <h5 style="border-bottom: 1px solid #e0e0e0; padding-bottom: 5px;">Guardian Information</h5>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Guardian Name:</strong>
+                    <span>
+                      <field name="guardian_name" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Guardian Relationship:</strong>
+                    <span>
+                      <field name="guardian_relationship" />
+                    </span>
+                  </div>
+                  <div class="o_kanban_item" style="flex: 1 1 calc(50% - 15px);">
+                    <strong style="margin-right: 5px;">Guardian Phone:</strong>
+                    <span>
+                      <field name="guardian_phone" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+
+  <!-- إجراء القائمة -->
+  <record id="action_school_student" model="ir.actions.act_window">
+    <field name="name">Students</field>
+    <field name="res_model">school.student</field>
+    <field name="view_mode">tree,form,search,kanban</field>
+  </record>
+
+  <record id="action_school_student_male" model="ir.actions.act_window">
+    <field name="name">Students</field>
+    <field name="res_model">school.student</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{"default_gender":'male'}</field>
+    <field name="domain">[('gender','=','male')]</field>
+  </record>
+  <record id="action_school_student_female" model="ir.actions.act_window">
+    <field name="name">Students</field>
+    <field name="res_model">school.student</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{"default_gender":'female'}</field>
+    <field name="domain">[('gender','=','female')]</field>
+  </record>
+
+</odoo>

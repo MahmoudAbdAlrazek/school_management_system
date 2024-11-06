@@ -1,0 +1,67 @@
+<odoo>
+  <!-- قائمة الطلاب في الشريط العلوي -->
+  <menuitem id="menu_root_school_management"
+            name="School Management System"
+            sequence="1" />
+
+  <!-- Menu item for Student -->
+  <menuitem id="menu_school_students"
+            name="Students"
+            parent="school_management_system.menu_root_school_management"
+            action="school_management_system.action_school_student"
+            sequence="1" />
+  <!-- Menu item for Nationality -->
+  <menuitem id="menu_nationality"
+            name="Nationality"
+            action="school_management_system.action_res_nationality"
+            parent="school_management_system.menu_root_school_management"
+            sequence="7"
+  />
+  <!--  <menuitem id="male_menu"-->
+  <!--            name="Male"-->
+  <!--            action="school_management_system.action_school_student_male"-->
+  <!--            parent="school_management_system.menu_school_students"-->
+  <!--            sequence="3" />-->
+
+  <!--  <menuitem id="female_menu"-->
+  <!--            name="Female"-->
+  <!--            action="school_management_system.action_school_student_female"-->
+  <!--            parent="school_management_system.menu_school_students"-->
+  <!--            sequence="4" />-->
+
+  <!-- Menu item for Classroom -->
+  <menuitem id="menu_school_classroom"
+            name="Classrooms"
+            parent="school_management_system.menu_root_school_management"
+            action="school_management_system.action_school_classroom"
+            sequence="2" />
+
+  <!-- Menu item for School Subject -->
+  <menuitem id="menu_school_subject"
+            name="Subjects"
+            parent="school_management_system.menu_root_school_management"
+            action="school_management_system.action_school_subject"
+            sequence="3" />
+
+  <!-- Menu item for Teacher -->
+  <menuitem id="menu_school_teacher"
+            name="Teachers"
+            parent="school_management_system.menu_root_school_management"
+            action="school_management_system.action_school_teacher"
+            sequence="4" />
+
+  <!--  Menu item for Student Subject Grade   -->
+  <menuitem id="menu_student_subject_grades"
+            name="Student Subject Grades"
+            parent="school_management_system.menu_root_school_management"
+            action="school_management_system.action_student_subject_grades"
+            sequence="5" />
+
+  <menuitem id="menu_student_stage_history"
+            name=" Student Stage History "
+            action="school_management_system.action_student_stage_history"
+            parent="school_management_system.menu_root_school_management"
+            sequence="6" />
+
+
+</odoo>

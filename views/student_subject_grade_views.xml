@@ -1,0 +1,71 @@
+<odoo>
+
+
+  <record id="view_student_subject_grade_form" model="ir.ui.view">
+    <field name="name">student.subject.grade.form</field>
+    <field name="model">student.subject.grade</field>
+    <field name="arch" type="xml">
+      <form string="Student Subject Grade">
+        <sheet>
+
+          <group>
+
+            <group string="Student">
+              <field name="student_id" options="{'no_open': True, 'no_create': True}" />
+              <!-- أضف هذا السطر لإظهار subject_ids -->
+              <field name="subject_ids" invisible="1" />
+
+              <!-- حقل مستخدم لإظهار used_subject_ids واعتمد عليه
+              في الدومين لخفاء المواد اللي اختارها الطالب قبل كدا -->
+              <field name="used_subject_ids" invisible="1" />
+              <field name="stage_education_student" />
+              <field name="classroom_stage_student" />
+              <field name="subject_id" options="{'no_open': True, 'no_create': True}"
+                     domain="[('id', 'in', subject_ids), ('id', 'not in', used_subject_ids)]" />
+
+
+              <field name="classroom_id" string="Classroom" options="{'no_open': True, 'no_create': True}" />
+              <!-- عرض المرحلة التعليمية -->
+              <field name="education_stage" /> <!-- إضافة هذا الحقل -->
+              <!-- عرض المرحلة الصفية -->
+              <field name="classroom_stage" /> <!-- إضافة هذا الحقل -->
+
+              <field name="active" />
+            </group>
+
+
+            <group string="Grade">
+              <field name="date" />
+              <field name="max_grade" />
+              <field name="grade" />
+              <field name="is_passed" />
+            </group>
+          </group>
+
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_student_subject_grade_tree" model="ir.ui.view">
+    <field name="name">student.subject.grade.tree</field>
+    <field name="model">student.subject.grade</field>
+    <field name="arch" type="xml">
+      <tree string="Student Subject Grades">
+        <field name="student_id" />
+        <field name="subject_id" />
+        <field name="max_grade" />
+        <field name="grade" />
+        <field name="is_passed" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_student_subject_grades" model="ir.actions.act_window">
+    <field name="name">Student Subject Grades</field>
+    <field name="res_model">student.subject.grade</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+
+</odoo>

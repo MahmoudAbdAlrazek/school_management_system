@@ -1,0 +1,63 @@
+<odoo>
+  <!-- Form view for School Subject -->
+  <record id="view_subject_form" model="ir.ui.view">
+    <field name="name">subject.form</field>
+    <field name="model">school.subject</field>
+    <field name="arch" type="xml">
+      <form string="Subject">
+        <sheet>
+          <group>
+            <group>
+              <field name="name" placeholder="Enter Subject Name" />
+              <field name="code" placeholder="Enter Subject Code" />
+              <field name="max_grade" string="Maximum Grade" />
+            </group>
+            <group>
+              <field name="credit_hours" />
+              <field name="description" widget="text" />
+              <field name="education_stage" />
+              <field name="classroom_stage" widget="radio" options="{'horizontal': True}" />
+              <!--              <field name="classroom_id" />-->
+              <!--              <field name="subject_grade_ids" />-->
+              <!--              <field name="student_ids" widget="many2many_tags"-->
+              <!--                     options="{'color_field': 'color','no_create': True,'no_edit': True}" />-->
+
+            </group>
+          </group>
+
+          <!--          <group string="Classrooms">-->
+          <!--            <field name="classroom_id" options="{'no_open': True, 'no_create': True, 'no_edit': True}">-->
+          <!--              <tree editable="bottom">-->
+          <!--                <field name="name" />-->
+          <!--              </tree>-->
+          <!--            </field>-->
+          <!--          </group>-->
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Tree view for School Subject -->
+  <record id="view_subject_tree" model="ir.ui.view">
+    <field name="name">subject.tree</field>
+    <field name="model">school.subject</field>
+    <field name="arch" type="xml">
+      <tree string="Subjects">
+        <field name="name" />
+        <field name="education_stage" />
+        <field name="classroom_stage" />
+        <field name="code" />
+        <field name="credit_hours" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- Action to open School Subject views -->
+  <record id="action_school_subject" model="ir.actions.act_window">
+    <field name="name">Subjects</field>
+    <field name="res_model">school.subject</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+
+</odoo>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_report_student_info" model="ir.actions.report">
+    <field name="name">Student Information Report</field>
+    <field name="model">school.student</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">school_management_system.report_student_info</field>
+    <field name="report_file">school_management_system.report_student_info</field>
+    <field name="print_report_name">'Student Information Report'</field>
+    <field name="binding_model_id" ref="model_school_student" />
+    <field name="binding_type">report</field>
+
+  </record>
+
+
+  <template id="report_student_info">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <t t-foreach="docs" t-as="doc">
+          <div class="page" style="padding: 20px; font-family: Arial, sans-serif;">
+            <div class="container mt-4">
+              <!-- Header Section -->
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <h2 class="border-bottom border-primary pb-2 mb-3">Student Information</h2>
+                  <p>
+                    <strong>Name:</strong>
+                    <span t-field="doc.name" style="text-transform: capitalize; font-weight: bold" />
+                  </p>
+                  <p>
+                    <strong>ID Number:</strong>
+                    <span t-field="doc.id_number" style="text-transform: capitalize; font-weight: bold" />
+                  </p>
+                </div>
+                <div class="col-md-6 text-end">
+                  <h2 class="border-bottom border-primary pb-2 mb-3">Education Stage</h2>
+                  <p>
+                    <span t-field="doc.education_stage" style="text-transform: capitalize; font-weight: bold" />
+                  </p>
+                </div>
+              </div>
+
+              <!-- Classroom Stage Section -->
+              <h3 class="bg-light p-2 border-left border-primary mb-3">Classroom</h3>
+              <p>
+                <strong>Classroom Stage:</strong>
+                <t t-set="current_stage_grades"
+                   t-value="doc.grade_ids.filtered(lambda g: g.education_stage == doc.education_stage)" />
+                <t t-set="stages" t-value="set(grade.classroom_stage for grade in current_stage_grades)" />
+                <t t-if="'1' in stages and len(stages) == 1">
+                  <span>First Term</span>
+                </t>
+                <t t-if="'2' in stages and len(stages) == 1">
+                  <span>Second Term</span>
+                </t>
+                <t t-if="'1' in stages and '2' in stages">
+                  <span>First and Second Terms</span>
+                </t>
+              </p>
+
+              <!-- Grades Section - Based on Student's Education Stage -->
+              <h3 class="bg-light p-2 border-left border-primary mb-3">
+                Grades for Education Stage:
+                <t t-esc="doc.education_stage" />
+              </h3>
+
+              <!-- عرض المواد بناءً على المرحلة التعليمية للطالب -->
+              <table class="table table-striped table-bordered">
+                <thead class="table-primary" style="text-align: center; vertical-align: middle;">
+                  <tr>
+                    <th>Subject</th>
+                    <th>Classroom Stage</th>
+                    <th>Max Grade</th>
+                    <th>Grade</th>
+                    <th>Is Passed</th>
+                  </tr>
+                </thead>
+                <tbody style="text-align: center; vertical-align: middle;">
+                  <!-- عرض فقط المواد المرتبطة بمرحلة التعليم الخاصة بالطالب -->
+                  <t t-foreach="doc.grade_ids.filtered(lambda g: g.education_stage == doc.education_stage)"
+                     t-as="grade">
+                    <tr>
+                      <td>
+                        <span t-field="grade.subject_id.name" />
+                      </td>
+                      <td>
+                        <span t-field="grade.classroom_stage" />
+                      </td>
+                      <td>
+                        <span t-field="grade.max_grade" />
+                      </td>
+                      <td>
+                        <span t-field="grade.grade" />
+                      </td>
+                      <td>
+                        <span t-field="grade.is_passed" />
+                      </td>
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+
+              <!-- Condition to show the overall status -->
+              <h4 class="mt-4 text-center">
+                <t t-set="grades"
+                   t-value="doc.grade_ids.filtered(lambda g: g.education_stage == doc.education_stage)" />
+                <t t-set="first_term_grades"
+                   t-value="grades.filtered(lambda g: g.classroom_stage == '1')" />
+                <t t-set="second_term_grades"
+                   t-value="grades.filtered(lambda g: g.classroom_stage == '2')" />
+
+                <t t-if="not first_term_grades and not second_term_grades">
+                  <!-- إذا لم يكن هناك درجات في أي فصل -->
+                  <span>No grades available for this student.</span>
+                </t>
+                <!--                <t t-elif="len(first_term_grades) == 0 or len(second_term_grades) == 0">-->
+                <!--                  <span>Please enter grades for both the first and second terms.</span>-->
+                <!--                </t>-->
+                <t t-else="">
+                  <t t-set="all_passed" t-value="all(grade.is_passed == 'pass' for grade in grades)" />
+                  <t t-set="all_subjects" t-value="len(grades)" />
+                  <t t-set="passed_subjects" t-value="len(grades.filtered(lambda g: g.is_passed == 'pass'))" />
+                  <t t-if="all_subjects == passed_subjects">
+                    <span class="text-success font-weight-bold">
+                      Student passed and promoted to the next education stage:
+                      <t t-esc="int(doc.education_stage) + 1" />
+                    </span>
+                  </t>
+                  <t t-else="">
+                    <span class="text-danger font-weight-bold">Student failed in at least one subject.</span>
+                  </t>
+                </t>
+              </h4>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+
+</odoo>
+

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_student,School Student,model_school_student,group_school_student_admin,1,1,1,1
+access_school_student,School Student,model_school_student,group_school_student_user,1,1,1,0
+access_res_nationality,Nationality,model_res_nationality,group_school_student_admin,1,1,1,1
+access_school_classroom,School Classroom,model_school_classroom,base.group_user,1,1,1,1
+access_school_subject,School Subject,model_school_subject,base.group_user,1,1,1,1
+access_school_teacher,School Teacher,model_school_teacher,base.group_user,1,1,1,1
+access_studen_subjec_grade,Student Subject Grade,model_student_subject_grade,base.group_user,1,1,1,1
+access_student_stage_history,Student Stage History,model_student_stage_history,group_school_student_admin,1,1,1,1

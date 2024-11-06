@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="category_school_management" model="ir.module.category">
+    <field name="name">School Management</field>
+  </record>
+
+  <!-- إنشاء مجموعة Admin -->
+  <record id="group_school_student_admin" model="res.groups">
+    <field name="name">School Student Admin</field>
+    <field name="category_id" ref="category_school_management" />
+  </record>
+
+  <!--  أنشاء مجموعة User -->
+  <record id="group_school_student_user" model="res.groups">
+    <field name="name">School Student User</field>
+    <field name="category_id" ref="category_school_management" />
+  </record>
+
+  <!-- صلاحيات الوصول Admin لنموذج school_student    -->
+  <record id="access_school_student_admin" model="ir.model.access">
+    <field name="name">School Student Admin Access</field>
+    <field name="model_id" ref="model_school_student" />
+    <field name="group_id" ref="group_school_student_admin" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="1" />
+  </record>
+
+  <!-- صلاحيات الوصول للمستخدم العادي User لنموذج school_student -->
+  <record id="access_school_student_user" model="ir.model.access">
+    <field name="name">School Student User Access</field>
+    <field name="model_id" ref="model_school_student" />
+    <field name="group_id" ref="group_school_student_user" />
+    <field name="perm_read" eval="1" />
+    <field name="perm_write" eval="1" />
+    <field name="perm_create" eval="1" />
+    <field name="perm_unlink" eval="0" />
+  </record>
+
+
+  <!-- قاعدة وصول للإداريين -->
+  <record id="rule_school_student_admin" model="ir.rule">
+    <field name="name">School Student Admin Rule</field>
+    <field name="model_id" ref="model_school_student" />
+    <field name="domain_force">[]</field> <!-- Admins can see all records -->
+    <field name="groups" eval="[(4, ref('school_management_system.group_school_student_admin'))]" />
+  </record>
+  <!-- قاعدة وصول للمستخدمين العاديين -->
+  <record id="rule_school_student_user" model="ir.rule">
+    <field name="name">School Student User Rule</field>
+    <field name="model_id" ref="model_school_student" />
+    <field name="domain_force">[('create_uid', '=', user.id)]</field> <!-- Users can see only their own records -->
+    <field name="groups" eval="[(4, ref('school_management_system.group_school_student_user'))]" />
+  </record>
+
+
+</odoo>
