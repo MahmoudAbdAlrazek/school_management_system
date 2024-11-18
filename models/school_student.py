@@ -15,7 +15,7 @@ class SchoolStudent(models.Model):
     #         'res.partner', string='Partner', required=True, ondelete='cascade', index=True, auto_join='res.partner'
     # )
     student_number = fields.Char(string='Student Number', required=True, copy=False, readonly=True, default=_('New'))
-    id_number = fields.Char(string='ID Number', copy=False, unique=True, required=True)
+    id_number = fields.Char(string='ID Number', copy=False, required=True)
 
     name = fields.Char(string='Student Name', required=True, tracking=True)
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender', required=True)
@@ -251,7 +251,7 @@ class SchoolStudent(models.Model):
         # phone_pattern = re.compile(r'^\d{10,15}$')  # يسمح فقط بالأرقام من 10 إلى 15 بدون رمز "+"
         # phone_pattern = re.compile(r'^\d{10}$')  # فرض أن الرقم يجب أن يكون بالضبط 10 أرقام
 
-        phone_pattern = re.compile(r'^\+?\d{10,15}$')  # يسمح بالأرقام من 10 إلى 15 مع رمز الدولة (+) اختياري
+        phone_pattern = re.compile(r'^\\+?\\d{10,15}$')  # يسمح بالأرقام من 10 إلى 15 مع رمز الدولة (+) اختياري
         for record in self:
             if record.phone:
                 # تحقق إذا كان الرقم يتوافق مع النمط
@@ -264,7 +264,7 @@ class SchoolStudent(models.Model):
 
     @api.constrains('email')
     def _check_email(self):
-        email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')  # نمط للتحقق من صيغة البريد الإلكتروني
+        email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$')  # نمط للتحقق من صيغة البريد الإلكتروني
         for record in self:
             if record.email:
                 # تحقق من صحة البريد الإلكتروني
