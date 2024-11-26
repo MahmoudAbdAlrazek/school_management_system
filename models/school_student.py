@@ -194,10 +194,10 @@ class SchoolStudent(models.Model):
                         raise UserError(f'الطالب {student.name} فشل في المواد التالية: {", ".join(failed_subjects)} ولا يمكنه الانتقال إلى المرحلة التعليمية التالية.')
                         # البحث عن الدرجات القديمة
                         # إخفاء الدرجات القديمة
-                    # حفظ الدرجات المتعلقة بالمرحلة القديمة
                     self.env['student.stage.history'].create(
                             {
                                     'student_id'     : student.id,
+                                    # 'old_stage': dict(self._fields['education_stage'].selection).get(old_stage, _('Unknown')),
                                     'old_stage'      : old_stage_label,
                                     'education_stage': new_stage,
                                     'date'           : fields.Datetime.now(),
@@ -205,6 +205,10 @@ class SchoolStudent(models.Model):
                                     'old_subject_ids': [(6, 0, old_subjects.ids)],  # حفظ المواد الخاصة بالمرحلة القديمة
                                     # 'new_subject_ids': [(6, 0, new_subjects.ids)],  # يمكن حفظ المواد الخاصة بالمرحلة الجديدة عند الحاجة
                             })
+                    # حفظ الدرجات المتعلقة بالمرحلة القديمة
+                    # تفريغ الدرجات المرتبطة بالمرحلة ا لقديمة من واجهة الطالب
+                    # student.grade_ids = [(3, grade.id, 0) for grade in student_grades]
+                    student.grade_ids = [(5, 0, 0)]
 
         # تنفيذ عملية الكتابة الأصلية بعد التحقق
         res = super(SchoolStudent, self).write(vals)
