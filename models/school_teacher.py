@@ -13,7 +13,7 @@ class SchoolTeacher(models.Model):
     email = fields.Char(string='Email')  # البريد الإلكتروني
 
     subject_ids = fields.Many2many('school.subject', string='Subjects')  # المواد التي يُدرّسها
-
+ 
     classroom_ids = fields.One2many('school.classroom', 'teacher_id', string='Classrooms', readonly=True)  # الفصول التي يُدرّس فيها
 
     color = fields.Integer(string='Color', default=lambda self: random.randint(0, 11))
